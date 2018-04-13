@@ -1,25 +1,80 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class gameGlobal : MonoBehaviour {
     public float diskThickness;
+    public GameObject diskPrefab;
+    public int diskCount = 5;
     List<tower> towers = new List<tower>();
     public List<disk> disks = new List<disk>();
     public bool inputBlocked = false;
     public List<disk> registerQueue = new List<disk>();
     public animator Animator;
+    List<GameObject> disksGO = new List<GameObject>();
 	// Use this for initialization
 	void Start () {
         Animator = GetComponent<animator>();
         RegisterNewTower(GameObject.Find("tower_0").GetComponent<tower>());
         RegisterNewTower(GameObject.Find("tower_1").GetComponent<tower>());
         RegisterNewTower(GameObject.Find("tower_2").GetComponent<tower>());
-        RegisterNewDisk(GameObject.Find("disk_2").GetComponent<disk>());
-        RegisterNewDisk(GameObject.Find("disk_1").GetComponent<disk>());
-        RegisterNewDisk(GameObject.Find("disk_0").GetComponent<disk>());
+        InitDisks(diskCount);
     }
 	
+    public bool InitDisks(int diskCount)
+    {
+        int a = 0;
+        while (GameObject.Find("diskPrefab(Clone)"))
+        {
+            Destroy(GameObject.Find("diskPrefab(Clone)"));
+            if (a++ > 999)
+            {
+                Debug.Log("inf loop");
+                break;
+            }
+        }
+        disks.Clear();
+        try
+        {
+            GameObject twr0 = GameObject.Find("tower_0");
+            Vector3 pos = twr0.GetComponent<Transform>().position;
+            GameObject twr1 = GameObject.Find("tower_1");
+            GameObject twr2 = GameObject.Find("tower_2");
+            float scale = 1f;
+            float scaleInc = 0.6f / (diskCount - 1f);
+            for (int i = diskCount-1; i >= 0; i--)
+            {
+                pos = new Vector3(pos.x, diskThickness * (diskCount - i - 1), pos.z);
+                GameObject dsk = Instantiate(diskPrefab, pos, diskPrefab.GetComponent<Transform>().rotation);
+                dsk.GetComponent<Transform>().localScale = new Vector3(scale, scale, dsk.GetComponent<Transform>().localScale.z);
+                dsk.GetComponent<disk>().towerID = 0;
+                dsk.GetComponent<disk>().diskSize = i;
+                RegisterNewDisk(dsk.GetComponent<disk>());
+                twr0.GetComponent<Transform>().localScale = new Vector3(twr0.GetComponent<Transform>().localScale.x, twr0.GetComponent<Transform>().localScale.y, twr0.GetComponent<Transform>().localScale.z + 0.2f);
+                twr1.GetComponent<Transform>().localScale = new Vector3(twr1.GetComponent<Transform>().localScale.x, twr1.GetComponent<Transform>().localScale.y, twr1.GetComponent<Transform>().localScale.z + 0.2f);
+                twr2.GetComponent<Transform>().localScale = new Vector3(twr2.GetComponent<Transform>().localScale.x, twr2.GetComponent<Transform>().localScale.y, twr2.GetComponent<Transform>().localScale.z + 0.2f);
+                scale -= scaleInc;
+            }
+        } catch (Exception e)
+        {
+            Debug.Log(e);
+            return false;
+        }
+        return true;
+    }
+
+    public void checkWin()
+    {
+        for (int i = 0; i < towers.Count; i++)
+        {
+            if (towers[i].diskCount == disks.Count && !towers[i].isStart)
+            {
+                Debug.Log("you win!");
+            }
+        }
+    }
+
     public tower RegisterNewDisk(disk dsk)
     {
         tower twr = GetTowerById(dsk.towerID);

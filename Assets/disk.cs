@@ -31,6 +31,7 @@ public class disk : MonoBehaviour {
             trgtTwr.AddDisk(this);
             game.Animator.Animate(animator.AT_MOVE_TO_TOWER, this, trgtTwr);
             selected = false;
+            game.checkWin();
         }
     }
 

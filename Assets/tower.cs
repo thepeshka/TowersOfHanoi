@@ -6,6 +6,7 @@ public class tower : MonoBehaviour {
     public int towerID;
     public int diskCount;
     public KeyCode key;
+    public bool isStart;
     Transform trans = null;
     bool selected = false;
     Stack<disk> disks = new Stack<disk>();

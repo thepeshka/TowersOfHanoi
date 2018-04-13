@@ -82,7 +82,7 @@ public class animator : MonoBehaviour {
                 {
                     Debug.Log("AT_SELECT_DISK");
                     Transform dskTrans = dsk.GetComponent<Transform>();
-                    createTween(TW_MOVE, new Point(dskTrans.position.x, 2.1f, dskTrans.position.z), 1f, dskTrans);
+                    createTween(TW_MOVE, new Point(dskTrans.position.x, 2.1f, dskTrans.position.z), baseSpeed, dskTrans);
                     break;
                 }
             case AT_DESELECT_DISK:
@@ -90,15 +90,15 @@ public class animator : MonoBehaviour {
                     Debug.Log("AT_DESELECT_DISK");
                     Transform dskTrans = dsk.GetComponent<Transform>();
                     tower twr = game.GetTowerById(dsk.towerID);
-                    createTween(TW_MOVE, new Point(dskTrans.position.x, (twr.diskCount - 1) * game.diskThickness, dskTrans.position.z), 1f, dskTrans);
+                    createTween(TW_MOVE, new Point(dskTrans.position.x, (twr.diskCount - 1) * game.diskThickness, dskTrans.position.z), baseSpeed, dskTrans);
                     break;
                 }
             case AT_MOVE_TO_TOWER:
                 {
                     Debug.Log("AT_MOVE_TO_TOWER");
                     Transform dskTrans = dsk.GetComponent<Transform>();
-                    createTween(TW_MOVE, new Point(trgt.GetComponent<Transform>().position.x, 2.1f, dskTrans.position.z), 1f, dskTrans);
-                    createTween(TW_MOVE, new Point(trgt.GetComponent<Transform>().position.x, (trgt.diskCount - 1) * game.diskThickness, dskTrans.position.z), 1f, dskTrans);
+                    createTween(TW_MOVE, new Point(trgt.GetComponent<Transform>().position.x, 2.1f, dskTrans.position.z), baseSpeed*2, dskTrans);
+                    createTween(TW_MOVE, new Point(trgt.GetComponent<Transform>().position.x, (trgt.diskCount - 1) * game.diskThickness, dskTrans.position.z), baseSpeed*2, dskTrans);
                     break;
                 }
         }
