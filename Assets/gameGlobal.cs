@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class gameGlobal : MonoBehaviour {
     public float diskThickness;
@@ -13,13 +15,17 @@ public class gameGlobal : MonoBehaviour {
     public List<disk> registerQueue = new List<disk>();
     public animator Animator;
     List<GameObject> disksGO = new List<GameObject>();
+    public int stepsNum = 0;
+    Text timerText;
+    float time = 0f;
 	// Use this for initialization
 	void Start () {
+        timerText = GameObject.Find("timer").GetComponent<Text>();
         Animator = GetComponent<animator>();
         RegisterNewTower(GameObject.Find("tower_0").GetComponent<tower>());
         RegisterNewTower(GameObject.Find("tower_1").GetComponent<tower>());
         RegisterNewTower(GameObject.Find("tower_2").GetComponent<tower>());
-        InitDisks(diskCount);
+        InitDisks(UIManager.diskNum);
     }
 	
     public bool InitDisks(int diskCount)
@@ -70,7 +76,8 @@ public class gameGlobal : MonoBehaviour {
         {
             if (towers[i].diskCount == disks.Count && !towers[i].isStart)
             {
-                Debug.Log("you win!");
+                SceneManager.UnloadScene("main");
+                SceneManager.LoadScene("mainMenu");
             }
         }
     }
@@ -150,5 +157,9 @@ public class gameGlobal : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        time += Time.deltaTime;
+        double min = Math.Floor(time / 60);
+        double sec = time % 60;
+        timerText.text = (min < 10 ? "0" : "") + ((int)min).ToString() + ":" + (sec < 10?"0":"") + sec.ToString("0.00");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class disk : MonoBehaviour {
 
@@ -27,6 +28,7 @@ public class disk : MonoBehaviour {
     {
         if (trgtTwr.topDisc == null || trgtTwr.topDisc.diskSize > this.diskSize)
         {
+            GameObject.Find("stepsLabel").GetComponent<Text>().text = "Steps: "+(++game.stepsNum).ToString();
             twr.RemoveDisk();
             trgtTwr.AddDisk(this);
             game.Animator.Animate(animator.AT_MOVE_TO_TOWER, this, trgtTwr);
