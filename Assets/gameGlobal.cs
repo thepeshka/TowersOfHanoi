@@ -18,8 +18,10 @@ public class gameGlobal : MonoBehaviour {
     public int stepsNum = 0;
     Text timerText;
     float time = 0f;
+    public bool win = false;
 	// Use this for initialization
 	void Start () {
+        UIManager.hideWinText();
         timerText = GameObject.Find("timer").GetComponent<Text>();
         Animator = GetComponent<animator>();
         RegisterNewTower(GameObject.Find("tower_0").GetComponent<tower>());
@@ -76,8 +78,8 @@ public class gameGlobal : MonoBehaviour {
         {
             if (towers[i].diskCount == disks.Count && !towers[i].isStart)
             {
-                SceneManager.UnloadScene("main");
-                SceneManager.LoadScene("mainMenu");
+                win = true;
+                UIManager.showWinText();
             }
         }
     }
@@ -157,9 +159,12 @@ public class gameGlobal : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        time += Time.deltaTime;
-        double min = Math.Floor(time / 60);
-        double sec = time % 60;
-        timerText.text = (min < 10 ? "0" : "") + ((int)min).ToString() + ":" + (sec < 10?"0":"") + sec.ToString("0.00");
+        if (!win)
+        {
+            time += Time.deltaTime;
+            double min = Math.Floor(time / 60);
+            double sec = time % 60;
+            timerText.text = (min < 10 ? "0" : "") + ((int)min).ToString() + ":" + (sec < 10 ? "0" : "") + sec.ToString("0.00");
+        }
     }
 }

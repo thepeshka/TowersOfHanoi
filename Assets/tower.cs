@@ -76,7 +76,7 @@ public class tower : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if (!game.inputBlocked && Input.GetKeyDown(key))
+        if (!game.inputBlocked && !game.win && Input.GetKeyDown(key))
         { // if left button pressed...
             for (int i = 0; i < game.disks.Count; i++)
             {
